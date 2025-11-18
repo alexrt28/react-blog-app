@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import "./CommentSection.css";
-
+import { useAuth } from "../authWrapper/authContext.js";
 
 export default function CommentSection({ postId }) {
+  const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
@@ -70,20 +71,27 @@ export default function CommentSection({ postId }) {
         </ul>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <textarea
-          placeholder="Write your comment"
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <button type="submit">Post Comment</button>
-      </form>
+            {user ? (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <textarea
+            placeholder="Write your comment"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <button type="submit">Post Comment</button>
+        </form>
+      ) : (
+        <p className="login-to-comment">
+          Please log in to add a comment.
+        </p>
+      )}
+
     </div>
   );
 }

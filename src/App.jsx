@@ -1,19 +1,20 @@
-import React, { useContext } from 'react'; // 1. Add useContext
+import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider, ThemeContext } from "./context/ThemeContext.jsx"; // 2. Add ThemeContext
+import { ThemeProvider, ThemeContext } from "./context/ThemeContext.jsx"
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import BlogPostsPage from "./pages/BlogPostsPage";
 import IndividualPostPage from "./pages/IndividualPostPage";
 import ContactPage from "./pages/ContactPage";
+import Login from "./components/Login/Login.jsx";
 import "./App.css";
+import { AuthProvider } from './components/authWrapper/AuthProvider.jsx';
+import HomePage from './pages/HomePage.jsx';
 
-// 3. Create a component that can access the theme context
+
 const AppContent = () => {
-  // Get the colors object from our context
   const { colors } = useContext(ThemeContext);
 
-  // Define the inline style for the main app container
   const appStyle = {
     backgroundColor: colors.background,
     color: colors.text,
@@ -21,15 +22,16 @@ const AppContent = () => {
     transition: 'background-color 0.3s ease, color 0.3s ease',
   };
 
-  // This is your original JSX, now wrapped in a styled div
   return (
     <div style={appStyle}>
       <Header />
       <main className="container">
         <Routes>
-          <Route path="/" element={<BlogPostsPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/posts" element={<BlogPostsPage />} />
           <Route path="/post/:id" element={<IndividualPostPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
       <Footer />
@@ -37,14 +39,14 @@ const AppContent = () => {
   );
 };
 
-// Your main App component is now simpler
 function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        {/* 4. Render the new component that applies the theme */}
-        <AppContent />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

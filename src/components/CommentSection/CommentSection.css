@@ -75,3 +75,8 @@
 .text-red-500 {
   color: #e63946;
 }
+.login-to-comment {
+  margin-bottom: 15px;
+  color: #b72020;
+  font-style: italic;
+}
